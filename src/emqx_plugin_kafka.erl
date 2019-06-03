@@ -90,7 +90,7 @@ on_message_publish(Message = #message{id   = PkgId,
     Str2 = <<"\", \"message\":[">>,
     Str3 = <<"]}">>,
     Str4 = <<Str1/binary, Topic/binary, Str2/binary, Payload/binary, Str3/binary>>,
-	{ok, KafkaTopic} = application:get_env(emqttd_kafka_bridge, values),
+	{ok, KafkaTopic} = application:get_env(emqx_plugin_kafka, values),
     ProduceTopic = proplists:get_value(kafka_producer_topic, KafkaTopic),
     ekaf:produce_async(ProduceTopic, Str4),	
     {ok, Message}.
@@ -104,7 +104,7 @@ on_message_acked(#{client_id := ClientId}, Message, _Env) ->
     {ok, Message}.
 
 ekaf_init(_Env) ->
-    {ok, Values} = application:get_env(emqttd_kafka_bridge, values),
+    {ok, Values} = application:get_env(emqx_plugin_kafka, values),
     BootstrapBroker = proplists:get_value(bootstrap_broker, Values),
     PartitionStrategy= proplists:get_value(partition_strategy, Values),
     application:set_env(ekaf, ekaf_partition_strategy, PartitionStrategy),
